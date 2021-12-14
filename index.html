@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Petite Vue Multi-Step Form</title>
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=B612+Mono:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1/dist/tailwind.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@1.10.0/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="app.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+  </head>
+  <bod style="">
+    <div 
+      v-scope 
+      @mounted="$el.hidden = false; startUp()"
+      @unmounted="disableClock()"
+      class="grid grid-cols-2 gap-20 p-2"
+      hidden>
+      <div class="pl-4">
+        <div class="card display-card">
+          <div class="px-3">&nbsp;</div>
+          <div class="px-3">{{ formatted }}</div>
+          <div class="px-3">&nbsp;</div>
+          <div class="px-3 text-center">-- READY --</div>
+          <div class="px-3">&nbsp;{{ redrum }}</div>
+          <div class="px-3">&nbsp;</div>
+          <div class="px-3">&nbsp;</div>
+        </div>
+
+      </div>
+      <div class="">
+        <div class="grid grid-cols-4 gap-0 pl-20" style="width:380px;">
+          <button class="btn btn-digit">1</button> 
+          <button class="btn btn-digit">2</button> 
+          <button class="btn btn-digit">3</button> 
+          <button class="btn btn-in">In</button>
+          <button class="btn btn-digit">4</button> 
+          <button class="btn btn-digit">5</button> 
+          <button class="btn btn-digit">6</button> 
+          <button class="btn btn-other">Dept</button>
+          <button class="btn btn-digit">7</button> 
+          <button class="btn btn-digit">8</button> 
+          <button class="btn btn-digit">9</button>
+          <button class="btn btn-other">Job</button>
+          <button class="btn btn-clr">Clr</button> 
+          <button class="btn btn-digit">0</button> 
+          <button class="btn btn-digit">.</button> 
+          <button class="btn btn-other">Task</button>
+          <div></div>
+          <button class="btn btn-enter col-span-2">Enter</button>
+          <button class="btn btn-out">out</button>
+        </div>        
+      </div>
+    </div>    
+    <!--
+    <div v-scope @mounted="$el.hidden = false; darkMode()">
+      <div class="columns-2">
+        <div>
+          xxxx
+        </div>
+        <div  class="break-after-column" style="width: 310px;">
+          <div class="grid grid-cols-4 gap-0">
+            <button class="btn btn-digit">1</button> 
+            <button class="btn btn-digit">2</button> 
+            <button class="btn btn-digit">3</button> 
+            <button class="btn btn-in">In</button>
+            <button class="btn btn-digit">4</button> 
+            <button class="btn btn-digit">5</button> 
+            <button class="btn btn-digit">6</button> 
+            <button class="btn btn-other">Dept</button>
+            <button class="btn btn-digit">7</button> 
+            <button class="btn btn-digit">8</button> 
+            <button class="btn btn-digit">9</button>
+            <button class="btn btn-other">Job</button>
+            <button class="btn btn-clr">Clr</button> 
+            <button class="btn btn-digit">0</button> 
+            <button class="btn btn-digit">.</button> 
+            <button class="btn btn-other">Task</button>
+            <div></div>
+            <button class="btn btn-enter col-span-2">Enter</button>
+            <button class="btn btn-out">out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
