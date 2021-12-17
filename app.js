@@ -211,22 +211,22 @@ createApp({
   },
 
   clearClick() {
-    if (this.mode=='job' && this.task) {
+    if (this.mode=='task' && this.task) {            // task
+      this.diagnostic('- clear job')
+      this.task = ''
+      this.taskName = ''
+    } else if (this.mode=='task') {
+      this.diagnostic('Mode: job') 
+      this.mode = 'job'
+    } else if (this.mode=='job' && this.job) {       // job
       this.diagnostic('- clear job')
       this.job = ''
       this.jobName = ''
-    } else if (this.mode=='job' && this.deptName) {
-      this.job = ''
-      this.jobName = ''
-      this.diagnostic('Mode: dept')
-      this.mode = 'dept'
     } else if (this.mode=='job') {
-      this.job = ''
-      this.jobName = ''
       this.diagnostic('Mode: card')
       this.mode = 'card'
       this.deptType = 0
-    } else if (this.mode=='dept' && this.dept) {
+    } else if (this.mode=='dept' && this.dept) {    // dept
       this.diagnostic('- clear dept')
       this.dept = ''
       this.deptName = ''
@@ -234,7 +234,7 @@ createApp({
       this.diagnostic('Mode: card')
       this.mode = 'card'
       this.deptType = 0
-    } else if (this.mode == 'card' && this.card) {
+    } else if (this.mode == 'card' && this.card) {   // card
       this.diagnostic('- clear card')
       this.card = ''
       this.employeeName = ''
