@@ -38,11 +38,11 @@
           <div class="px-3">&nbsp;</div>
           <div class="px-3">{{ formatted }}</div>
           <div class="px-3">{{ line2 }}</div>
-          <div v-if="dept || mode=='waiting'" class="px-3">{{ line3 }}</div>
+          <div v-if="mode=='waiting'||mode=='dept'||!!dept" class="px-3">{{ line3 }}</div>
           <div class="px-3">{{ line4 }}</div>
           <div class="px-3">{{ line5 }}</div>
           <div class="px-3">{{ line6 }}</div>
-          <div v-if="!dept||!mode=='waiting'" class="px-3">&nbsp;</div>
+          <div v-if="!mode=='waiting'||!mode=='dept'||!dept" class="px-3">&nbsp;</div>
           <div class="px-3">{{ line7 }}</div>
           <div class="px-3">{{ line8 }}</div>
         </div>
@@ -65,7 +65,7 @@
           <button class="btn btn-clr" @click="clearClick()">Clr</button> 
           <button class="btn btn-digit" @click="digitClick('0')">0</button> 
           <button class="btn btn-digit">.</button> 
-          <button class="btn btn-other">Task</button>
+          <button class="btn btn-other" @click="taskClick()">Task</button>
           <div></div>
           <button class="btn btn-enter col-span-2" @click="enterClick()">Enter</button>
           <button class="btn btn-out" @click="inoutClick('OUT');">out</button>

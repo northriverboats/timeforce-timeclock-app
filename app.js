@@ -33,12 +33,18 @@ createApp({
   deptName: '',
   deptType: 0,            // 0=Override, 1=Transfer
   job: '',
-  Task: '',
+  jobName: '',
+  task: '',
+  taskName: '',
   ClockID: 1,
   LastServerTime: 0,
   LastLocalTime: 0,
 
   // Generic Functions ========================================================
+  diagnostic(text) {
+    console.log(text)
+  },
+
   formatTime() {
     var digital = new Date()
     var hours1 = digital.getHours()
@@ -62,24 +68,25 @@ createApp({
   },
 
   // Update Display Functions =================================================
+  blob() {
+    this.diagnostic(`mode: ${this.mode} -- card: ${this.card} -- employee: ${this.employeeName} -- dept: ${this.dept} -- dname: ${this.deptName} -- task: ${this.task} -- tname: ${this.taskName}`)
+  },
+
+  displayReady() {
+    return this.mode == 'waiting' ? this.ready : ''
+  },
+
   displayMakeSelection() {
-    if (!this.autoEnter && this.employeeName) {
-      this.line7 = x+x+x+x+x+x+x+x+x+'Make Selections'
-      this.line8 = x+x+x+x+x+x+x+'Then Press [ENTER]'
-    } else {
-      this.line7 = x
-      this.line8 = x
-    }
+    return !this.autoEnter && this.employeeName && this.mode == 'card' ? x+x+x+x+x+x+x+x+x+'Make Selections' : x
+  },
+
+  displayPressEnter() {
+    return !this.autoEnter && this.employeeName && this.mode == 'card' ? x+x+x+x+x+x+x+'Then Press [ENTER]' : x
   },
 
   displayCardLine() {
     if (this.mode == 'waiting') {
-      console.log('- showing ready line')
-      this.line2 = x
-      this.line3 = this.ready
-      this.line7 = x
-      this.line8 = x
-      return
+      return x
     }
     const total = this.employeeName.length + this.card.length
     const spaces = this.spaces.substring(0, 23 - total)
@@ -89,58 +96,95 @@ createApp({
     } else if (this.io_status == 'O') {
       ending = '(OUT)'
     }
-
-    this.line2 = `Card:${this.card}${x}${this.employeeName}${spaces}${x}${ending}`
-    this.displayMakeSelection()
+    return `Card:${this.card}${x}${this.employeeName}${spaces}${x}${ending}`
   },
 
   displayDeptLine() {
-    if (this.mode != 'dept') {
-      this.line3 = x
-      return
+    if (!this.deptName&&this.mode!='dept') {
+      return x 
     }
     const total = this.dept.length + this.deptName.length
     const spaces = this.spaces.substring(0, 18 - total)
     const dept = this.deptType ? '(Transfer)' : '(Override)'
-    this.line3 = `Dept:${this.dept}${x}${this.deptName}${spaces}${x}${dept}`
-    this.displayMakeSelection()
+    const bob = `Dept:${this.dept}${x}${this.deptName}${spaces}${x}${dept}`
+    return bob
   },
   
   displayJobLine() {
-    this.line4 = x+'Job:'
-    this.displayMakeSelection()
+    if (!(this.mode == 'job' || this.mode == 'task')) {
+      return x
+    }
+    return x + 'Job:' + this.job + x + this.jobName
   },
 
   displayTaskLine() {
-    this.line5 = 'Task:'
+    if (this.mode != 'task') {
+      return x
+    }
+    return 'Task:' + this.task + x + this.taskName
   },
 
+  displayUpdate() {
+    this.line2 = this.displayCardLine()
+    this.line3 = this.displayDeptLine() + this.displayReady()
+    this.line4 = this.displayJobLine()
+    this.line5 = this.displayTaskLine() 
+    this.line6 = x
+    this.line7 = this.displayMakeSelection()
+    this.line8 = this.displayPressEnter()
+
+  },
 
   // Handle Click Functions ===================================================
   digitClick(digit) {
     if (this.mode == 'waiting') {
+      this.diagnostic('Mode: card')
       this.mode = 'card'
-      this.line3 = x
     }
     if (this.mode == 'card' && this.card.length < 4) {
       this.card = this.card + digit
+      this.diagnostic(`- key ${digit}`)
       if (this.employees[this.card]) {
         this.employeeName = this.employees[this.card]['fullname'].substring(0, 19)
+        this.diagnostic(`- Employee: ${this.employeeName}`)
       } else {
         this.employeeName = ''
+        if (this.card.length == 4) {
+          this.diagnostic('- Employee: -- Not Found --')
+        }
       }
-      this.displayCardLine()
     } else if (this.mode == 'dept' && this.dept.length < 4) {
       this.dept = this.dept + digit
+      this.diagnostic(`- key ${digit}`)
       if (this.departments[this.dept]) {
-        this.deptName = this.departments[this.dept]['departmentname'].substring(0, 16)
-        } else {
-          this.deptName = ''
-        }
-      this.displayDeptLine()
-    } else if(this.mode == 'job' && this.job.length < 4) {
-       this.displayJobLine() 
+        this.deptName = this.departments[this.dept]['departmentname'].substring(0, 15)
+        this.diagnostic(`- Dept: ${this.deptName}`)
+      } else {
+        this.deptName = ''
+        this.diagnostic('- Dept: -- Not Found --')
+      }
+    } else if(this.mode == 'job' && this.job.length < 10) {
+      this.job = this.job + digit
+      this.diagnostic(`- key ${digit}`)
+      if (this.jobs[this.job]) {
+        this.jobName = (this.jobs[this.job]['jobname']+' '+ this.jobs[this.job]['jobdescription']).substring(0,20)
+        this.diagnostic(`- Job: ${this.jobName}`)
+      } else {
+        this.jobName = ''
+        this.diagnostic('- Job: -- Not Found --')
+      }
+    } else if(this.mode == 'task' && this.task.length < 4) {
+      this.task = this.task + digit
+      this.diagnostic(`- key ${digit}`)
+      if (this.tasks[this.task]) {
+        this.taskName = (this.tasks[this.task]['taskname']+' '+ this.tasks[this.task]['taskdescription']).substring(0,29 - this.task.length)
+        this.diagnostic(`- Task: ${this.taskName}`)
+      } else {
+        this.taskName = ''
+        this.diagnostic('- Task: -- Not Found --')
+      }
     }
+    this.displayUpdate()
   },
 
   inoutClick(type) {
@@ -157,60 +201,80 @@ createApp({
     } else if (char === 'O'){
       this.io_status = char
     }
-    this.displayCardLine()
+    this.displayUpdate()
   },
 
   enterClick() {
     if(this.mode == 'card' && this.employeeName )  {
-        console.log('submitting card')
+        this.diagnostic('submitting card')
     }
   },
 
   clearClick() {
-    if (this.mode=='dept' && this.dept) {
-      console.log('clear to dept')
-      this.dept = ''
-      this.deptName = ''
-      this.displayDeptLine()
-    } else if (this.mode=='dept') {
-      console.log('clear to card')
+    if (this.mode=='job' && this.task) {
+      this.diagnostic('- clear job')
+      this.job = ''
+      this.jobName = ''
+    } else if (this.mode=='job' && this.deptName) {
+      this.job = ''
+      this.jobName = ''
+      this.diagnostic('Mode: dept')
+      this.mode = 'dept'
+    } else if (this.mode=='job') {
+      this.job = ''
+      this.jobName = ''
+      this.diagnostic('Mode: card')
       this.mode = 'card'
       this.deptType = 0
-      this.displayDeptLine()
-      this.displayCardLine()
+    } else if (this.mode=='dept' && this.dept) {
+      this.diagnostic('- clear dept')
+      this.dept = ''
+      this.deptName = ''
+    } else if (this.mode=='dept') {
+      this.diagnostic('Mode: card')
+      this.mode = 'card'
+      this.deptType = 0
     } else if (this.mode == 'card' && this.card) {
-      console.log('clear to card')
+      this.diagnostic('- clear card')
       this.card = ''
       this.employeeName = ''
       this.io_status = '?'
-      this.displayCardLine()
     } else if (this.mode == 'card') {
-      console.log('clear to waiting')
+      this.diagnostic('Mode: waiting') 
       this.mode = 'waiting'
-      this.displayCardLine()
     } else {
-      console.log('do nothing')
+      this.diagnostic('Mode: -----')
     }
+    this.displayUpdate()
   },
 
   deptClick() {
     if (this.mode == 'dept') {
       this.deptType = this.deptType ? 0 : 1
-      this.displayDeptLine()
+      this.diagnostic(`- toggle: ${this.deptType}`)
     } else if (this.mode == 'card' && this.employeeName) {
       this.mode = 'dept'
-      this.displayDeptLine()
+      this.diagnostic('Mode: dept')
     }
+    this.displayUpdate()
   },
 
   jobClick() {
     if (this.mode == 'dept' && this.deptName) {
-      this.mode = 'job'
-      this.displayJobLine()
+      // pass
     } else if (this.mode == 'card' && this.employeeName) {
       this.mode = 'job'
-      this.displayJobLine()
+      this.diagnostic('Mode: Job')
     }
+    this.displayUpdate()
+  },
+
+  taskClick() {
+    if (this.mode == 'job' && this.jobName) {
+      this.mode = 'task'
+      this.diagnostic('Mode: task')
+    }
+    this.displayUpdate()
   },
 
 
@@ -248,16 +312,13 @@ createApp({
 
   // Main Function ============================================================
   startUp() {
+    this.diagnostic('App Starting ------')
     this.mode = 'waiting'
     this.enableClock()
     this.getDepartments()
     this.getEmployees()
     this.getJobs()
     this.getTasks()
-    this.line3 = this.ready
+    this.displayUpdate()
   },
-
-
-
-
 }).mount()
