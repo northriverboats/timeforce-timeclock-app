@@ -1,17 +1,17 @@
 <%
-	Set rsUser = cnnMain.Execute("SELECT timeoffset FROM userLogin WHERE user_id = "&guserID)
-	IF NOT rsUser.EOF THEN
-		TimeOffset=rsUser.fields("timeoffset")
-	ELSE
-		TimeOffset
-	END IF
-	Set rsUser = nothing
-	
-	Minutes = Round(TimeOffset * 60)
+  Set rsUser = cnnMain.Execute("SELECT timeoffset FROM userLogin WHERE user_id = "&guserID)
+  IF NOT rsUser.EOF THEN
+    TimeOffset=rsUser.fields("timeoffset")
+  ELSE
+    TimeOffset
+  END IF
+  Set rsUser = nothing
+ 
+  Minutes = Round(TimeOffset * 60)
 
 
-	currenttime = now()
-	currenttime = DateAdd("n",Minutes,currenttime)
+  currenttime = now()
+  currenttime = DateAdd("n",Minutes,currenttime)
 %>
 
 <Script language="JavaScript" type="text/javascript">
@@ -34,7 +34,7 @@ var LastServerTime = new Date('<%= currentime %>');
 var LastLocalTime = new Date();
 
 
-function StartClock() 
+function StartClock()
 {
  if (!document.layers && !document.all) return;
  UpdateTimeClockDisplay();
@@ -47,7 +47,7 @@ function UpdateTimeClockDisplay()
   var Line2 = "";
   var Line3 = Space+Space+Space+Space+"-- READY --";
   var Line4 = "";
-  
+ 
   switch (Status)
   {
     case 1: Line1 = "Card: " + Field;
@@ -75,7 +75,7 @@ function UpdateTimeClockDisplay()
             Line2 = "Tips: " + Field;
             Line3 = "";
             Line4 = "";
-						break;
+            break;
     case 5: Line1 = "Card: " + Card;
             Line2 = "Job: "+Field;
             Line3 = "";
@@ -99,37 +99,37 @@ function UpdateTimeClockDisplay()
             Line4 = "Task Qty: "+Field;
             break;
   }
-	//rsEmp = cnnMain.Execute("SELECT employee_id FROM empMain");
-	//Line4 = rsEmp.fields("employee_id");
+  //rsEmp = cnnMain.Execute("SELECT employee_id FROM empMain");
+  //Line4 = rsEmp.fields("employee_id");
 
-	if (IOStatus != "?"){Line1 = Line1 + Space+"("+IOStatus+")";}
-	if (LBStatus != "?"){Line1 = Line1 + Space+"("+LBStatus+")";}
-	RefreshDisplay(Line1,Line2,Line3,Line4);
+  if (IOStatus != "?"){Line1 = Line1 + Space+"("+IOStatus+")";}
+  if (LBStatus != "?"){Line1 = Line1 + Space+"("+LBStatus+")";}
+  RefreshDisplay(Line1,Line2,Line3,Line4);
 
 }
 
 function RefreshDisplay(Value1,Value2,Value3,Value4)
 {
- if (document.layers) 
- { 
- 	document.layers.Line1.document.write(Value1);
- 	document.layers.Line1.document.close();
- 	document.layers.Line2.document.write(Value2);
- 	document.layers.Line2.document.close();
- 	document.layers.Line3.document.write(Value3);
- 	document.layers.Line3.document.close();
- 	document.layers.Line4.document.write(Value4);
- 	document.layers.Line4.document.close();
+ if (document.layers)
+ {
+   document.layers.Line1.document.write(Value1);
+   document.layers.Line1.document.close();
+   document.layers.Line2.document.write(Value2);
+   document.layers.Line2.document.close();
+   document.layers.Line3.document.write(Value3);
+   document.layers.Line3.document.close();
+   document.layers.Line4.document.write(Value4);
+   document.layers.Line4.document.close();
  }
  else
  {
- 	if (document.all)
- 	{
- 		Line1.innerHTML = Value1;
- 		Line2.innerHTML = Value2;
- 		Line3.innerHTML = Value3;
- 		Line4.innerHTML = Value4;
- 	}
+   if (document.all)
+   {
+     Line1.innerHTML = Value1;
+     Line2.innerHTML = Value2;
+     Line3.innerHTML = Value3;
+     Line4.innerHTML = Value4;
+   }
  }
 }
 
@@ -151,100 +151,100 @@ function Clear()
 
 function KeyPress()
 {
-	switch (event.keyCode)
+  switch (event.keyCode)
   {
-		case 120: //x
-		case 88:  //X
-			location.href = '/qqest/Login/Logout.asp';
-			break;
-		case 113: //q
-		case 81:  //Q
-			ButtonQtyClick();
-			break;
-		case 106: //j 
-		case 74:  //J
-        	    ButtonJobClick();
-							break;
-		case 107: //k 
-		case 75:  //K
-        	    ButtonTaskClick();
-							break;
-		case 98:  //b 
-		case 66:  //B
-		          ButtonBreakClick();
-							break;
-		case 27:  //ESC 
-		case 99:  //C 
-		case 67:  //c
-		          ButtonCLRClick();
-		          break;
-		case 100: //D
-		case 68:  //d
-		          ButtonDeptClick();
-							break;
-		case 13:  //ENTER 
-		case 101: //E 
-		case 69:  //e
-		          ButtonEnterClick();
-							break;
-		case 105: //I
-		case 73:  //i
-		          ButtonInClick();
-							break;
-		case 108: //L 
-		case 76:  //l
-		          ButtonLunchClick();
-							break;
-		case 111: //O 
-		case 79:  //o
-		          ButtonOutClick();
-							break;
-		case 116: //T 
-		case 84:  //t
-		          ButtonTipsClick();
-							break;
-		case 48:  ButtonNumberClick("0");
-							break;
-		case 49:  ButtonNumberClick("1");
-							break;
-		case 50:  ButtonNumberClick("2");
-							break;
-		case 51:  ButtonNumberClick("3");
-							break;
-		case 52:  ButtonNumberClick("4");
-							break;
-		case 53:  ButtonNumberClick("5");
-							break;
-		case 54:  ButtonNumberClick("6");
-							break;
-		case 55:  ButtonNumberClick("7");
-							break;
-		case 56:  ButtonNumberClick("8");
-							break;
-		case 57:  ButtonNumberClick("9");
-							break;
-	}
+    case 120: //x
+    case 88:  //X
+      location.href = '/qqest/Login/Logout.asp';
+      break;
+    case 113: //q
+    case 81:  //Q
+      ButtonQtyClick();
+      break;
+    case 106: //j
+    case 74:  //J
+              ButtonJobClick();
+              break;
+    case 107: //k 
+    case 75:  //K
+              ButtonTaskClick();
+              break;
+    case 98:  //b 
+    case 66:  //B
+              ButtonBreakClick();
+              break;
+    case 27:  //ESC 
+    case 99:  //C 
+    case 67:  //c
+              ButtonCLRClick();
+              break;
+    case 100: //D
+    case 68:  //d
+              ButtonDeptClick();
+              break;
+    case 13:  //ENTER 
+    case 101: //E 
+    case 69:  //e
+              ButtonEnterClick();
+              break;
+    case 105: //I
+    case 73:  //i
+              ButtonInClick();
+              break;
+    case 108: //L 
+    case 76:  //l
+              ButtonLunchClick();
+              break;
+    case 111: //O 
+    case 79:  //o
+              ButtonOutClick();
+              break;
+    case 116: //T 
+    case 84:  //t
+              ButtonTipsClick();
+              break;
+    case 48:  ButtonNumberClick("0");
+              break;
+    case 49:  ButtonNumberClick("1");
+              break;
+    case 50:  ButtonNumberClick("2");
+              break;
+    case 51:  ButtonNumberClick("3");
+              break;
+    case 52:  ButtonNumberClick("4");
+              break;
+    case 53:  ButtonNumberClick("5");
+              break;
+    case 54:  ButtonNumberClick("6");
+              break;
+    case 55:  ButtonNumberClick("7");
+              break;
+    case 56:  ButtonNumberClick("8");
+              break;
+    case 57:  ButtonNumberClick("9");
+              break;
+  }
 }
 
 function ButtonNumberClick(Button)
 {
   var MaxSize = 10;
-	if (Button == "."){
-		//return;
-	}
+  if (Button == "."){
+    //return;
+  }
   switch (Status)
   {
     case 0: 
-			MaxSize = 10
-			Status = 1;
+      MaxSize = 10
+      Status = 1;
             break;            
     case 1: 
-			MaxSize = 10;
+      MaxSize = 10;
             break;
     case 2: 
-			Status = 1;
-			Field=Card;
-			MaxSize = 10;		
+      Status = 1;
+      Field=Card;
+      MaxSize = 10;    
             break;
   }
   var addKey = true; 
@@ -299,7 +299,7 @@ function ButtonCLRClick()
 {
   if (Field > "")
   {
-  	Field = "";
+    Field = "";
   }
   else
   {
@@ -338,24 +338,24 @@ function ButtonJobClick()
 {
   switch (Status)
   {
-  	case 1: Card=Field;
+    case 1: Card=Field;
             Field="";
-  			JobQty="";
-  			Task="";
-  			TaskQty="";
-  	        Status=5;
-  	        break;
-  	case 2: Status=5;
-  	        break;
-  	case 6:
-  	case 7:
-  	case 8: Status=5;
-  			JobQty="";
-  			Task="";
-  			TaskQty="";
-  			Field=Job;
-  			Job="";
-  	        break;
+        JobQty="";
+        Task="";
+        TaskQty="";
+            Status=5;
+            break;
+    case 2: Status=5;
+            break;
+    case 6:
+    case 7:
+    case 8: Status=5;
+        JobQty="";
+        Task="";
+        TaskQty="";
+        Field=Job;
+        Job="";
+            break;
   }
   UpdateTimeClockDisplay();
 }
@@ -374,11 +374,11 @@ function ButtonTaskClick()
             TaskQty="";
             Status=7;
             break;
-  	case 8: Status=7;
-  	        Field=Task;
-  	        Task="";
-  			TaskQty="";
-  	        break;
+    case 8: Status=7;
+            Field=Task;
+            Task="";
+        TaskQty="";
+            break;
   }
   UpdateTimeClockDisplay();
 }
@@ -465,10 +465,10 @@ function ButtonSoft2Click()
 
 function DateTime()
 {
-	var digital = new Date();
-	
-	digital.setTime(digital.getTime()+(LastServerTime.getTime()-LastLocalTime.getTime()));
-	return digital;
+  var digital = new Date();
+  
+  digital.setTime(digital.getTime()+(LastServerTime.getTime()-LastLocalTime.getTime()));
+  return digital;
 }
 
 function TimeLine() 
@@ -520,96 +520,96 @@ function PunchTime()
 function AttendancePunches()
 {
   var Punches = new String();
-	if (Dept != "") 
-	{
-	  if (DeptType == 1)
-		{
-			Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--DeptTransfer="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Dept+"-->";
-	 	  }
-		else
-		{
-		  Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Swipe="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+IOStatus+","+LBStatus+"-->";
-		  Punches = Punches + "\n<!--DeptOverride="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Dept+"-->";
-		}
-	}
-	else
-	{
-		Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Swipe="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+IOStatus+","+LBStatus+"-->";
-	}
-	
-	if (Tips != "")
-	{
-		Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Tips="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Tips+"-->";
-	}
-	
+  if (Dept != "") 
+  {
+    if (DeptType == 1)
+    {
+      Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--DeptTransfer="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Dept+"-->";
+       }
+    else
+    {
+      Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Swipe="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+IOStatus+","+LBStatus+"-->";
+      Punches = Punches + "\n<!--DeptOverride="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Dept+"-->";
+    }
+  }
+  else
+  {
+    Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Swipe="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+IOStatus+","+LBStatus+"-->";
+  }
+  
+  if (Tips != "")
+  {
+    Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Tips="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Tips+"-->";
+  }
+  
   return Punches;
 }
 
 function JTSPunches()
 {
   var Punches = new String();
-	if (JobQty == "") {JobQty="0";}
-	if (Task == "") {Task="0";}
-	if (TaskQty == "") {TaskQty="0";}
-	Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Job="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Job+","+JobQty+","+Task+","+TaskQty+","+IOStatus+"-->";
+  if (JobQty == "") {JobQty="0";}
+  if (Task == "") {Task="0";}
+  if (TaskQty == "") {TaskQty="0";}
+  Punches = "<% Request.ServerVariables('REMOTE_ADDR') %>--><!--Job="+ClockID+","+Card+","+PunchDate()+","+PunchTime()+","+Job+","+JobQty+","+Task+","+TaskQty+","+IOStatus+"-->";
   return Punches;
 }
 
 function SaveSwipe()
 {
-	if (Card=="")
-	{
-	  alert("You Must Enter A Card Number");
-		return;
-	}
-	if(Card=="0")
-	{
-		alert("0 is not a valid card number");
-		return;
-	}
-	if (Status > 4) //JTS Entry
-	{
-	  if (Job == "") 
-		{
-		  alert("You Must Enter A Job Number");
-			return;
-		}
-		if(Job=="0")
-		{
-			alert("0 is not a valid job number");
-			return;
-		}
-		if (TaskQty != "")
-		{
-		  if (Task == "")
-			{
-		    alert("You Must Enter A <% getKeyword(gtTask) %> Number To Enter <% getKeyword(gtTask) %> Quantities");
-			  return;
-			}
-			if(Task=="0")
-			{
-				alert("0 is not a valid task number");
-				return;
-			}
-		}
-	}
+  if (Card=="")
+  {
+    alert("You Must Enter A Card Number");
+    return;
+  }
+  if(Card=="0")
+  {
+    alert("0 is not a valid card number");
+    return;
+  }
+  if (Status > 4) //JTS Entry
+  {
+    if (Job == "")
+    {
+      alert("You Must Enter A Job Number");
+      return;
+    }
+    if(Job=="0")
+    {
+      alert("0 is not a valid job number");
+      return;
+    }
+    if (TaskQty != "")
+    {
+      if (Task == "")
+      {
+        alert("You Must Enter A <% getKeyword(gtTask) %> Number To Enter <% getKeyword(gtTask) %> Quantities");
+        return;
+      }
+      if(Task=="0")
+      {
+        alert("0 is not a valid task number");
+        return;
+      }
+    }
+  }
   switch (Status)
   {
     case 2: //Simple Swipe
-		case 3: //Department
-		case 4: //Tips
-						var newswipe = AttendancePunches();
-				 		window.location.href='processNetClock.asp?newswipe='+newswipe;
-				 		break;
-		case 5: //Job
-		case 6: //Job Qty
-		case 7: //Task
-		case 8: //Task Qty
-						var newswipe = JTSPunches();
-				 		window.location.href='processNetClock.asp?newswipe='+newswipe;
-				 		//alert(JTSPunches());
-		     		break;
-		
+    case 3: //Department
+    case 4: //Tips
+            var newswipe = AttendancePunches();
+             window.location.href='processNetClock.asp?newswipe='+newswipe;
+             break;
+    case 5: //Job
+    case 6: //Job Qty
+    case 7: //Task
+    case 8: //Task Qty
+            var newswipe = JTSPunches();
+             window.location.href='processNetClock.asp?newswipe='+newswipe;
+             //alert(JTSPunches());
+             break;
+
   }
   Clear();
 }
