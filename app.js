@@ -53,7 +53,7 @@ createApp({
     var day1 = digital.getDate()
     var year1 = digital.getYear()
     var amOrPm = "AM"
-   
+
     if (day1 < 10) day1 = "0" + day1
     if (month1 < 10) month1 = "0" + month1
     if (hours1 > 11) amOrPm = "PM"
@@ -61,7 +61,6 @@ createApp({
     if (hours1 == 0) hours1 = 12
     if (hours1 < 10) hours1 = "0" + hours1
     if (minutes1 <= 9) minutes1 = "0" + minutes1;
-   
     this.formatted = `${month1}/${day1}/${year1} ${hours1}:${minutes1}${amOrPm}`
     this.LastLocalTime = digital
     this.LastServerTime = digital
@@ -101,7 +100,7 @@ createApp({
 
   displayDeptLine() {
     if (!this.deptName&&this.mode!='dept') {
-      return x 
+      return x
     }
     const total = this.dept.length + this.deptName.length
     const spaces = this.spaces.substring(0, 18 - total)
@@ -109,7 +108,7 @@ createApp({
     const bob = `Dept:${this.dept}${x}${this.deptName}${spaces}${x}${dept}`
     return bob
   },
-  
+
   displayJobLine() {
     if (!(this.mode == 'job' || this.mode == 'task')) {
       return x
@@ -128,7 +127,7 @@ createApp({
     this.line2 = this.displayCardLine()
     this.line3 = this.displayDeptLine() + this.displayReady()
     this.line4 = this.displayJobLine()
-    this.line5 = this.displayTaskLine() 
+    this.line5 = this.displayTaskLine()
     this.line6 = x
     this.line7 = this.displayMakeSelection()
     this.line8 = this.displayPressEnter()
@@ -216,7 +215,7 @@ createApp({
       this.task = ''
       this.taskName = ''
     } else if (this.mode=='task') {
-      this.diagnostic('Mode: job') 
+      this.diagnostic('Mode: job')
       this.mode = 'job'
     } else if (this.mode=='job' && this.job) {       // job
       this.diagnostic('- clear job')
@@ -240,7 +239,7 @@ createApp({
       this.employeeName = ''
       this.io_status = '?'
     } else if (this.mode == 'card') {
-      this.diagnostic('Mode: waiting') 
+      this.diagnostic('Mode: waiting')
       this.mode = 'waiting'
     } else {
       this.diagnostic('Mode: -----')
