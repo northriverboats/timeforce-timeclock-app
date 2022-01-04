@@ -278,22 +278,22 @@ createApp({
 
 
   // Load Data From Server ====================================================
-  async getEmployees(url = `/employees.json`) {
+  async getEmployees(url = `/api/v1/employees`) {
     const resp = await fetch(url).then((res) => res.json())
     this.employees = resp
   },
 
-  async getDepartments(url = `/departments.json`) {
+  async getDepartments(url = `/api/v1/departments`) {
     const resp = await fetch(url).then((res) => res.json())
     this.departments = resp
   },
 
-  async getJobs(url = `/jobs.json`) {
+  async getJobs(url = `/api/v1/jobs`) {
     const resp = await fetch(url).then((res) => res.json())
     this.jobs = resp
   },
 
-  async getTasks(url = `/tasks.json`) {
+  async getTasks(url = `/api/v1/tasks`) {
     const resp = await fetch(url).then((res) => res.json())
     this.tasks = resp
   },
