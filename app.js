@@ -103,13 +103,15 @@ createApp({
       return x
     }
     const total = this.dept.length + this.deptName.length
-    const spaces = this.spaces.substring(0, 18 - total)
-    const dept = this.deptType ? '(Transfer)' : '(Override)'
-    const bob = `Dept:${this.dept}${x}${this.deptName}${spaces}${x}${dept}`
-    return bob
+    const dept = `Dept:${this.dept}${x}${this.deptName}`
+    return dept
   },
 
   displayJobLine() {
+    if (this.mode == 'dept') {
+      const dept = this.deptType ? '(Transfer)' : '(Override)'
+      return x+x+x+x+x+x+dept
+    }
     if (!(this.mode == 'job' || this.mode == 'task')) {
       return x
     }
