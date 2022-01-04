@@ -146,7 +146,7 @@ createApp({
       this.card = this.card + digit
       this.diagnostic(`- key ${digit}`)
       if (this.employees[this.card]) {
-        this.employeeName = this.employees[this.card]['fullname'].substring(0, 19)
+        this.employeeName = this.employees[this.card]['fullname'].substring(0, 29)
         this.diagnostic(`- Employee: ${this.employeeName}`)
       } else {
         this.employeeName = ''
