@@ -158,7 +158,7 @@ createApp({
       this.dept = this.dept + digit
       this.diagnostic(`- key ${digit}`)
       if (this.departments[this.dept]) {
-        this.deptName = this.departments[this.dept]['departmentname'].substring(0, 15)
+        this.deptName = this.departments[this.dept]['departmentname']
         this.diagnostic(`- Dept: ${this.deptName}`)
       } else {
         this.deptName = ''
