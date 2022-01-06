@@ -30,19 +30,18 @@
     <div 
       v-scope 
       @mounted="$el.hidden = false; startUp()"
-      @unmounted="disableClock()"
+      @unmounted="shutdown()"
       class="grid grid-cols-2 gap-20 p-2"
       hidden>
       <div class="pl-4">
         <div class="card display-card">
           <div class="px-3">&nbsp;</div>
-          <div class="px-3">{{ formatted }}</div>
+          <div class="px-3">{{ line1 }}</div>
           <div class="px-3">{{ line2 }}</div>
-          <div v-if="mode=='waiting'||mode=='dept'||!!dept" class="px-3">{{ line3 }}</div>
+          <div class="px-3">{{ line3 }}</div>
           <div class="px-3">{{ line4 }}</div>
           <div class="px-3">{{ line5 }}</div>
           <div class="px-3">{{ line6 }}</div>
-          <div v-if="!mode=='waiting'||!mode=='dept'||!dept" class="px-3">&nbsp;</div>
           <div class="px-3">{{ line7 }}</div>
           <div class="px-3">{{ line8 }}</div>
         </div>
