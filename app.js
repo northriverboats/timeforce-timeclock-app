@@ -1,5 +1,7 @@
 import { createApp } from 'https://unpkg.com/petite-vue@0.2.2/dist/petite-vue.es.js'
 const x = String.fromCharCode(160)
+var that = ''
+var t1 = ''
 
 createApp({
   // exposed to all expressions
@@ -23,7 +25,7 @@ createApp({
 
   count: 0,
   timer: 0,
-  formatted: '00/00/0000  00:00AM',
+  line1: '00/00/0000  00:00AM',
 
   card: '',
   employeeName: '',
@@ -36,6 +38,7 @@ createApp({
   jobName: '',
   task: '',
   taskName: '',
+  taskDeptName: '',
   ClockID: 1,
   LastServerTime: 0,
   LastLocalTime: 0,
@@ -61,7 +64,7 @@ createApp({
     if (hours1 == 0) hours1 = 12
     if (hours1 < 10) hours1 = "0" + hours1
     if (minutes1 <= 9) minutes1 = "0" + minutes1;
-    this.formatted = `${month1}/${day1}/${year1} ${hours1}:${minutes1}${amOrPm}`
+    this.line1 = `${month1}/${day1}/${year1} ${hours1}:${minutes1}${amOrPm}`
     this.LastLocalTime = digital
     this.LastServerTime = digital
   },
@@ -76,11 +79,25 @@ createApp({
   },
 
   displayMakeSelection() {
-    return !this.autoEnter && this.employeeName && this.mode == 'card' ? x+x+x+x+x+x+x+x+x+'Make Selections' : x
+    if (!this.autoEnter && this.employeeName && this.mode == 'card') {
+      return x+x+x+x+x+x+x+x+x+'Make Selections'
+    } else if (this.mode == 'job' && this.jobName ) {
+      return x+x+x+x+x+x+x+x+x+'Make Selections'
+    }
+    return x
   },
 
   displayPressEnter() {
-    return !this.autoEnter && this.employeeName && this.mode == 'card' ? x+x+x+x+x+x+x+'Then Press [ENTER]' : x
+    if (!this.autoEnter && this.employeeName && this.mode == 'card') {
+      return x+x+x+x+x+x+x+'Then Press [ENTER]'
+    } else if (this.mode == 'dept' && this.deptName) {
+      return x+x+x+x+x+x+x+x+x+'Press [ENTER]'
+    } else if (this.mode == 'task' && this.taskName) {
+      return x+x+x+x+x+x+x+'Press [ENTER]'
+    } else if (this.mode == 'job' && this.jobName ) {
+      return x+x+x+x+x+x+x+'Then Press [ENTER]'
+    }
+    return x
   },
 
   displayCardLine() {
@@ -88,14 +105,18 @@ createApp({
       return x
     }
     const total = this.employeeName.length + this.card.length
-    const spaces = this.spaces.substring(0, 23 - total)
+    const spaces = this.spaces.substring(0, 19)
     var ending = ''
     if (this.io_status == 'I') {
       ending = x+'(IN)'
     } else if (this.io_status == 'O') {
       ending = '(OUT)'
     }
-    return `Card:${this.card}${x}${this.employeeName}${spaces}${x}${ending}`
+    return `Card:${this.card}${x}${spaces}${x}${ending}`
+  },
+
+  displayNameLine() {
+    return this.employeeName ? x+x+x+x+x+this.employeeName.substring(0,30) : x
   },
 
   displayDeptLine() {
@@ -107,31 +128,38 @@ createApp({
     return dept
   },
 
-  displayJobLine() {
+  displayTransferOverride() {
     if (this.mode == 'dept') {
       const dept = this.deptType ? '(Transfer)' : '(Override)'
-      return x+x+x+x+x+x+dept
+      return x+x+x+x+x+x+x+x+x+x+x+dept
     }
-    if (!(this.mode == 'job' || this.mode == 'task')) {
-      return x
-    }
-    return x + 'Job:' + this.job + x + this.jobName
+    return x 
+  },
+
+  displayJobLine() {
+    return (!(this.mode == 'job' || this.mode == 'task')) ? x : `Job:${this.job}`
+  },
+
+  displayJobNameLine() {
+    return this.jobName ? x+x+x+x+this.jobName.substring(0,30) : x
   },
 
   displayTaskLine() {
-    if (this.mode != 'task') {
-      return x
-    }
-    return 'Task:' + this.task + x + this.taskName
+    return this.mode == 'task' ? 'Task:' + (this.task+x+x+x+x).substring(0,4) + this.taskDeptName : x
   },
 
+  displayTaskName() {
+    return this.mode == 'task' ? x+x+x+x+this.taskName : x
+  },
+
+  // only the first item on line needs to return an 'x' if it is unused
   displayUpdate() {
     this.line2 = this.displayCardLine()
-    this.line3 = this.displayDeptLine() + this.displayReady()
-    this.line4 = this.displayJobLine()
-    this.line5 = this.displayTaskLine()
-    this.line6 = x
-    this.line7 = this.displayMakeSelection()
+    this.line3 = this.displayNameLine()
+    this.line4 = this.displayDeptLine() + this.displayJobLine() + this.displayReady()
+    this.line5 = this.displayTransferOverride() + this.displayJobNameLine()
+    this.line6 = this.displayTaskLine()
+    this.line7 = this.displayMakeSelection() + this.displayTaskName()
     this.line8 = this.displayPressEnter()
 
   },
@@ -146,7 +174,7 @@ createApp({
       this.card = this.card + digit
       this.diagnostic(`- key ${digit}`)
       if (this.employees[this.card]) {
-        this.employeeName = this.employees[this.card]['fullname'].substring(0, 29)
+        this.employeeName = this.employees[this.card]['fullname']
         this.diagnostic(`- Employee: ${this.employeeName}`)
       } else {
         this.employeeName = ''
@@ -158,7 +186,7 @@ createApp({
       this.dept = this.dept + digit
       this.diagnostic(`- key ${digit}`)
       if (this.departments[this.dept]) {
-        this.deptName = this.departments[this.dept]['departmentname']
+        this.deptName = this.departments[this.dept]['departmentname'] || ''
         this.diagnostic(`- Dept: ${this.deptName}`)
       } else {
         this.deptName = ''
@@ -168,7 +196,7 @@ createApp({
       this.job = this.job + digit
       this.diagnostic(`- key ${digit}`)
       if (this.jobs[this.job]) {
-        this.jobName = (this.jobs[this.job]['jobname']+' '+ this.jobs[this.job]['jobdescription']).substring(0,20)
+        this.jobName = this.jobs[this.job]['jobname']+ ' ' + (this.jobs[this.job]['jobdescription'] || '')
         this.diagnostic(`- Job: ${this.jobName}`)
       } else {
         this.jobName = ''
@@ -178,10 +206,13 @@ createApp({
       this.task = this.task + digit
       this.diagnostic(`- key ${digit}`)
       if (this.tasks[this.task]) {
-        this.taskName = (this.tasks[this.task]['taskname']+' '+ this.tasks[this.task]['taskdescription']).substring(0,29 - this.task.length)
+        this.taskName = this.tasks[this.task]['taskname'] || ''
+        const dept = this.tasks[this.task]['departmentname'] || ''
+        this.taskDeptName = dept == 'Out' ? 'Outfitting' : dept
         this.diagnostic(`- Task: ${this.taskName}`)
       } else {
         this.taskName = ''
+        this.taskDeptName = ''
         this.diagnostic('- Task: -- Not Found --')
       }
     }
@@ -301,6 +332,79 @@ createApp({
   },
 
 
+  // Keyboad Functions ========================================================
+  enableKeyboard() {
+    window.addEventListener('keydown', this.keyboardEvent)
+  },
+  disableKeyborad() {
+    window.removeEventListener('keydown', this.keyboardEvent)
+  },
+  keyboardEvent(e) {
+    switch(e.code) {
+      case 'Numpad7':
+        window.that.digitClick('7')
+        break
+      case 'Numpad8':
+        window.that.digitClick('8')
+        break
+      case 'Numpad9':
+        window.that.digitClick('9')
+        break
+      case 'Numpad4':
+        window.that.digitClick('4')
+        break
+      case 'Numpad5':
+        window.that.digitClick('5')
+        break
+      case 'Numpad6':
+        window.that.digitClick('6')
+        break
+      case 'Numpad1':
+        window.that.digitClick('1')
+        break
+      case 'Numpad2':
+        window.that.digitClick('2')
+        break
+      case 'Numpad3':
+        window.that.digitClick('3')
+        break
+      case 'Numpad0':
+        window.that.digitClick('0')
+        break
+      case 'Tab':
+        window.that.inoutClick("I")
+        break
+      case 'Equal':
+        window.that.inoutClick("O")
+        break
+      case 'O':
+        window.that.inputClick("0")
+        break
+      case 'Backspace':
+        window.that.deptClick()
+        break
+      case 'NumpadSubtract':
+        window.that.jobClick()
+        break
+      case 'NumpadAdd':
+        window.that.taskClick()
+        break
+      case 'NumpadDecimal':
+        window.that.clearClick()
+        break
+      case 'Escape':
+        window.that.clearClick()
+        break
+      case 'NumpadEnter':
+        window.that.enterClick()
+        break
+    }
+  },
+
+  afterThing() {
+    console.log("After Thing")
+  },
+
   // Timer Functions ==========================================================
   enableClock() {
     this.timer = window.setInterval(() => this.formatTime(), 1000)
@@ -316,10 +420,17 @@ createApp({
     this.diagnostic('App Starting ------')
     this.mode = 'waiting'
     this.enableClock()
+    this.enableKeyboard()
     this.getDepartments()
     this.getEmployees()
     this.getJobs()
     this.getTasks()
     this.displayUpdate()
+    window.that = this
+  },
+  shutDown() {
+    this.diagnostic('App Ending ------')
+    disableClock()
+    disableKeyboard()
   },
 }).mount()
