@@ -93,7 +93,7 @@ createApp({
     } else if (this.mode == 'dept' && this.deptName) {
       return x+x+x+x+x+x+x+x+x+'Press [ENTER]'
     } else if (this.mode == 'task' && this.taskName) {
-      return x+x+x+x+x+x+x+'Press [ENTER]'
+      return x+x+x+x+x+x+x+x+x+'Press [ENTER]'
     } else if (this.mode == 'job' && this.jobName ) {
       return x+x+x+x+x+x+x+'Then Press [ENTER]'
     }
@@ -149,7 +149,7 @@ createApp({
   },
 
   displayTaskName() {
-    return this.mode == 'task' ? x+x+x+x+this.taskName : x
+    return this.mode == 'task' ? x+x+x+x+this.taskName.substring(0, 30) : x
   },
 
   // only the first item on line needs to return an 'x' if it is unused
@@ -207,8 +207,9 @@ createApp({
       this.diagnostic(`- key ${digit}`)
       if (this.tasks[this.task]) {
         this.taskName = this.tasks[this.task]['taskname'] || ''
-        const dept = this.tasks[this.task]['departmentname'] || ''
-        this.taskDeptName = dept == 'Out' ? 'Outfitting' : dept
+        this.taskDeptName = this.tasks[this.task]['departmentname'] || ''
+        this.taskDeptName = (this.taskDeptName == 'Out' ? 'Outfitting' : this.taskDeptName)
+        this.taskDeptName = (this.taskDeptName == 'Fab' ? 'Fabrication' : this.taskDeptName)
         this.diagnostic(`- Task: ${this.taskName}`)
       } else {
         this.taskName = ''
@@ -247,6 +248,7 @@ createApp({
       this.diagnostic('- clear job')
       this.task = ''
       this.taskName = ''
+      this.taskDeptName = ''
     } else if (this.mode=='task') {
       this.diagnostic('Mode: job')
       this.mode = 'job'
