@@ -36,6 +36,10 @@ createApp({
   deptType: 0,            // 0=Override, 1=Transfer
   job: '',
   jobName: '',
+  punch5min: 70,
+  punch5sec: 0,
+  punch15min: 70,
+  punch15sec: 0,
   task: '',
   taskName: '',
   taskDeptName: '',
@@ -49,7 +53,7 @@ createApp({
   },
 
   getRandomInt(max) {
-      return Math.floor(Math.random() * max);
+    return Math.floor(Math.random() * max);
   },
 
   handleTimeEvents() {
@@ -58,12 +62,15 @@ createApp({
     const seconds = digital.getSeconds()
     const minutes = digital.getMinutes()
     const hours = digital.getHours()
-    if (seconds == this.getRandomInt(50) && minutes % 5 == 0) {
-      console.log(`once every 5 minutes now at ${hours}:${minutes}`)
+    if (seconds == this.punch5sec && minutes % 5 == 0 && minutes != this.punch5min) {
+      this.sendPunches()
+      this.punch5min = minutes
+      this.punch5sec = this.getRandomInt(12) * 5
     }
-    if (seconds == this.getRandomInt(50)  && minutes % 15 == 1) {
+    if (seconds == this.punch15sec && minutes % 15 == 1 && minutes != this.punch15min) {
       this.refreshTimeforceData()
-      console.log(`once every 15 minutes now at ${hours}:${minutes}`)
+      this.punch15min = minutes
+      this.punch15sec = this.getRandomInt(12) * 5
     }
   },
 
@@ -93,6 +100,10 @@ createApp({
     this.getEmployees()
     this.getJobs()
     this.getTasks()
+  },
+
+  sendPunches() {
+    // future home of send punches code
   },
 
   // Update Display Functions =================================================
@@ -435,6 +446,8 @@ createApp({
 
   // Timer Functions ==========================================================
   enableClock() {
+    this.punch5sec = this.getRandomInt(12) * 5
+    this.punch15sec = this.getRandomInt(12) * 5
     this.timer = window.setInterval(() => this.handleTimeEvents(), 1000)
   },
 
