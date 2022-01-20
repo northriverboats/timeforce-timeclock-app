@@ -48,6 +48,25 @@ createApp({
     console.log(text)
   },
 
+  getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+  },
+
+  handleTimeEvents() {
+    this.formatTime()
+    var digital = new Date()
+    const seconds = digital.getSeconds()
+    const minutes = digital.getMinutes()
+    const hours = digital.getHours()
+    if (seconds == this.getRandomInt(50) && minutes % 5 == 0) {
+      console.log(`once every 5 minutes now at ${hours}:${minutes}`)
+    }
+    if (seconds == this.getRandomInt(50)  && minutes % 15 == 1) {
+      this.refreshTimeforceData()
+      console.log(`once every 15 minutes now at ${hours}:${minutes}`)
+    }
+  },
+
   formatTime() {
     var digital = new Date()
     var hours1 = digital.getHours()
@@ -67,6 +86,13 @@ createApp({
     this.line1 = `${month1}/${day1}/${year1} ${hours1}:${minutes1}${amOrPm}`
     this.LastLocalTime = digital
     this.LastServerTime = digital
+  },
+
+  refreshTimeforceData() {
+    this.getDepartments()
+    this.getEmployees()
+    this.getJobs()
+    this.getTasks()
   },
 
   // Update Display Functions =================================================
@@ -409,7 +435,7 @@ createApp({
 
   // Timer Functions ==========================================================
   enableClock() {
-    this.timer = window.setInterval(() => this.formatTime(), 1000)
+    this.timer = window.setInterval(() => this.handleTimeEvents(), 1000)
   },
 
   disableClock() {
@@ -423,10 +449,7 @@ createApp({
     this.mode = 'waiting'
     this.enableClock()
     this.enableKeyboard()
-    this.getDepartments()
-    this.getEmployees()
-    this.getJobs()
-    this.getTasks()
+    this.refreshTimeforceData()
     this.displayUpdate()
     window.that = this
   },
