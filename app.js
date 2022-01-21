@@ -422,7 +422,6 @@ createApp({
 
   async getIpAddress(url = `/api/v1/ip`) {
     const resp = await fetch(url).then((res) => res.json())
-    console.log(resp.ip)
     this.ipAddress = resp.ip
   },
 
