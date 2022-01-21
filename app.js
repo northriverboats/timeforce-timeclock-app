@@ -74,6 +74,13 @@ createApp({
   timer: 0,
   line1: '00/00/0000  00:00AM',
 
+  ipAddress: '10.10.200.254',
+
+  punch5min: 70,
+  punch5sec: 0,
+  punch15min: 70,
+  punch15sec: 0,
+
   card: '',
   employeeName: '',
   io_Status: '?',         // ?=none, I=In, O=Out
@@ -83,10 +90,6 @@ createApp({
   deptType: 0,            // 0=Override, 1=Transfer
   job: '',
   jobName: '',
-  punch5min: 70,
-  punch5sec: 0,
-  punch15min: 70,
-  punch15sec: 0,
   task: '',
   taskName: '',
   taskDeptName: '',
@@ -417,6 +420,12 @@ createApp({
     this.tasks = resp
   },
 
+  async getIpAddress(url = `/api/v1/ip`) {
+    const resp = await fetch(url).then((res) => res.json())
+    console.log(resp.ip)
+    this.ipAddress = resp.ip
+  },
+
 
   // Keyboad Functions ========================================================
   enableKeyboard() {
@@ -509,6 +518,7 @@ createApp({
     this.mode = 'waiting'
     this.enableClock()
     this.enableKeyboard()
+    this.getIpAddress()
     this.refreshTimeforceData()
     this.displayUpdate()
     window.that = this
