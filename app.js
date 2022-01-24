@@ -124,23 +124,29 @@ createApp({
     }
   },
 
-  formatTime() {
-    var digital = new Date()
+  _formatTime(digital, offset=1900, hrs24=false) {
     var hours1 = digital.getHours()
     var minutes1 = digital.getMinutes()
     var month1 = digital.getMonth()+1
     var day1 = digital.getDate()
     var year1 = digital.getYear()
-    var amOrPm = "AM"
+    var amOrPm = 'AM'
+    var body = ''
 
-    if (day1 < 10) day1 = "0" + day1
-    if (month1 < 10) month1 = "0" + month1
-    if (hours1 > 11) amOrPm = "PM"
-    if (hours1 > 12) hours1 = hours1 - 12
-    if (hours1 == 0) hours1 = 12
-    if (hours1 < 10) hours1 = "0" + hours1
-    if (minutes1 <= 9) minutes1 = "0" + minutes1;
-    this.line1 = `${month1}/${day1}/${year1} ${hours1}:${minutes1}${amOrPm}`
+    if (day1 < 10) day1 = '0' + day1
+    if (month1 < 10) month1 = '0' + month1
+    if (hours1 > 11) amOrPm = 'PM'
+    if (hrs24) amOrPm = ''
+    if (hours1 > 12 && !hrs24) hours1 = hours1 - 12
+    if (hours1 == 0 && !hrs24) hours1 = 12
+    if (hours1 < 10) hours1 = '0' + hours1
+    if (minutes1 <= 9) minutes1 = '0' + minutes1;
+    return `${month1}/${day1}/${year1+offset} ${hours1}:${minutes1}${amOrPm}`
+  },
+
+  formatTime() {
+    var digital = new Date()
+    this.line1 = this._formatTime(digital)
     this.LastLocalTime = digital
     this.LastServerTime = digital
   },
@@ -325,8 +331,17 @@ createApp({
   },
 
   enterClick() {
-    if(this.mode == 'card' && this.employeeName )  {
-        this.diagnostic('submitting card')
+    if (this.mode == 'task' && this.taskName) {
+        this.diagnostic('submitting job and task punch')
+    } else if (this.mode == 'job' && this.jobName) {
+        this.diagnostic('submitting job punch')
+    } else if (this.mode == 'dept' && this.deptName && this.deptType) {
+        this.diagnostic('submitting department transfer punch')
+    } else if (this.mode == 'dept' && this.deptName) {
+        this.diagnostic('submitting department override punch')
+    } else if(this.mode == 'card' && this.employeeName )  {
+        punch = `<!--${ipAddress}--><!--Swipe=1,${this.card},11/08/121,13:27,?,?-->`
+        this.diagnostic('submitting standard puch')
     }
   },
 
@@ -492,6 +507,12 @@ createApp({
       case 'NumpadEnter':
         window.that.enterClick()
         break
+      case 'KeyA': // testing add value to local storage
+	break
+      case 'KeyD': // delete last value from local storage
+	break
+      case 'KeyP': // print out value from local storage
+	break
     }
   },
 
@@ -521,6 +542,8 @@ createApp({
     this.refreshTimeforceData()
     this.displayUpdate()
     window.that = this
+    // JSON.parse()
+    // JSON.stringify()
   },
   shutDown() {
     this.diagnostic('App Ending ------')
