@@ -83,7 +83,7 @@ createApp({
 
   card: '',
   employeeName: '',
-  io_Status: '?',         // ?=none, I=In, O=Out
+  io_status: '?',         // ?=none, I=In, O=Out
   Status: 0,             // 0=Idle, 1=card, 2=Waiting
   dept: '',
   deptName: '',
@@ -327,21 +327,29 @@ createApp({
     } else if (char === 'O'){
       this.io_status = char
     }
+    this.diagnostic(this.io_status)
     this.displayUpdate()
   },
 
   enterClick() {
+    const punchTime = this._formatTime(new Date(), 0, true)
+    var punch = ''
     if (this.mode == 'task' && this.taskName) {
+        punch = `<!--${this.ipAddress}--><!--Swipe=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.job},0,${this.task},0,${this.io_status},?-->`
         this.diagnostic('submitting job and task punch')
+        this.diagnostic(punch)
     } else if (this.mode == 'job' && this.jobName) {
+        punch = `<!--${this.ipAddress}--><!--Swipe=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.job},0,0,0,${this.io_status},?-->`
         this.diagnostic('submitting job punch')
+        this.diagnostic(punch)
     } else if (this.mode == 'dept' && this.deptName && this.deptType) {
         this.diagnostic('submitting department transfer punch')
     } else if (this.mode == 'dept' && this.deptName) {
         this.diagnostic('submitting department override punch')
     } else if(this.mode == 'card' && this.employeeName )  {
-        punch = `<!--${ipAddress}--><!--Swipe=1,${this.card},11/08/121,13:27,?,?-->`
+        punch = `<!--${this.ipAddress}--><!--Swipe=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.io_status},?-->`
         this.diagnostic('submitting standard puch')
+        this.diagnostic(punch)
     }
   },
 
