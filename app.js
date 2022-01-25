@@ -343,9 +343,14 @@ createApp({
         this.diagnostic('submitting job punch')
         this.diagnostic(punch)
     } else if (this.mode == 'dept' && this.deptName && this.deptType) {
+        punch = `<!--${this.ipAddress}--><!--DeptTransfer=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.dept}-->`
         this.diagnostic('submitting department transfer punch')
+        this.diagnostic(punch)
     } else if (this.mode == 'dept' && this.deptName) {
+        punch = `<!--${this.ipAddress}--><!--DeptTransfer=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.io_status},?-->`
+        punch += `\n<!--DeptOverride=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.dept}-->`
         this.diagnostic('submitting department override punch')
+        this.diagnostic(punch)
     } else if(this.mode == 'card' && this.employeeName )  {
         punch = `<!--${this.ipAddress}--><!--Swipe=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.io_status},?-->`
         this.diagnostic('submitting standard puch')
