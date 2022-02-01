@@ -355,7 +355,17 @@ createApp({
         punch = `<!--${this.ipAddress}--><!--Swipe=1,${this.card},${punchTime.substring(0,9)},${punchTime.substring(10)},${this.io_status},?-->`
         this.diagnostic('submitting standard puch')
         this.diagnostic(punch)
+    } else {
+      return ;
     }
+    var punches = JSON.parse(window.localStorage.getItem('punches'))
+    console.log("\nBEFORE==========================")
+    punches.forEach(item => console.log(`  ${item}`))
+    punches.push(punch)
+    window.localStorage.setItem('punches', JSON.stringify(punches))
+    console.log("\AFTER===========================")
+    punches.forEach(punch => console.log(`  ${punch}`))
+    this.clearToReady()
   },
 
   clearClick() {
@@ -397,6 +407,23 @@ createApp({
     this.displayUpdate()
   },
 
+  clearToReady() {
+    this.task = ''
+    this.taskName = ''
+    this.taskDeptName = ''
+    this.job = ''
+    this.jobName = ''
+    this.deptType = 0
+    this.dept = ''
+    this.deptName = ''
+    this.card = ''
+    this.employeeName = ''
+    this.io_status = '?'
+    this.mode = 'waiting'
+    this.diagnostic('Clear Clock\nMode: waiting')
+    this.displayUpdate()
+  },
+
   deptClick() {
     if (this.mode == 'dept') {
       this.deptType = this.deptType ? 0 : 1
@@ -426,6 +453,9 @@ createApp({
     this.displayUpdate()
   },
 
+  removeOldestPunch() {
+
+  },
 
   // Load Data From Server ====================================================
   async getEmployees(url = `/api/v1/employees`) {
@@ -525,6 +555,8 @@ createApp({
       case 'KeyD': // delete last value from local storage
 	break
       case 'KeyP': // print out value from local storage
+        var punch = JSON.parse(window.localStorage.getItem('punches'))
+	console.log(punch)
 	break
     }
   },
@@ -554,6 +586,9 @@ createApp({
     this.getIpAddress()
     this.refreshTimeforceData()
     this.displayUpdate()
+    if (!window.localStorage.getItem('punches')) {
+      window.localStorage.setItem('punches', JSON.stringify([]))
+    }
     window.that = this
     // JSON.parse()
     // JSON.stringify()
