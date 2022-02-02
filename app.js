@@ -81,7 +81,7 @@ createApp({
   punch15min: 70,
   punch15sec: 0,
 
-  updating: false,
+  uploading: false,
   punching: false,
 
   card: '',
