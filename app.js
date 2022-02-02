@@ -81,6 +81,9 @@ createApp({
   punch15min: 70,
   punch15sec: 0,
 
+  updating: false,
+  punching: false,
+
   card: '',
   employeeName: '',
   io_status: '?',         // ?=none, I=In, O=Out
@@ -358,6 +361,7 @@ createApp({
     } else {
       return ;
     }
+    this. punchingClock()
     var punches = JSON.parse(window.localStorage.getItem('punches'))
     console.log("\nBEFORE==========================")
     punches.forEach(item => console.log(`  ${item}`))
@@ -574,6 +578,11 @@ createApp({
 
   disableClock() {
     window.clearTimeout(this.timer)
+  },
+
+  punchingClock() {
+    this.punching = true
+    window.setTimeout(() => { this.punching = false }, 2000)
   },
 
 

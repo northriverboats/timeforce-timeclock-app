@@ -33,6 +33,9 @@
       @unmounted="shutdown()"
       class="grid grid-cols-2 gap-20 p-2"
       hidden>
+      <img v-if="punching" src="punching.png" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden flex flex-col items-center justify-center" />
+      <img v-if="uploading" src="uploading.png" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden flex flex-col items-center justify-center" /> 
+
       <div class="pl-4">
         <div class="card display-card">
           <div class="px-3">&nbsp;</div>
