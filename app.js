@@ -324,6 +324,7 @@ createApp({
         this.diagnostic('- Task: -- Not Found --')
       }
     }
+    this.playClick()
     this.displayUpdate()
   },
 
@@ -341,6 +342,7 @@ createApp({
     } else if (char === 'O'){
       this.io_status = char
     }
+    this.playClick()
     this.diagnostic(this.io_status)
     this.displayUpdate()
   },
@@ -372,6 +374,7 @@ createApp({
     } else {
       return ;
     }
+    this.playAccepted()
     this. punchingClock()
     var punches = JSON.parse(window.localStorage.getItem('punches'))
     console.log("\nBEFORE==========================")
@@ -418,7 +421,10 @@ createApp({
       this.mode = 'waiting'
     } else {
       this.diagnostic('Mode: -----')
+      this.displayUpdate()
+      return
     }
+    this.playClick()
     this.displayUpdate()
   },
 
@@ -443,9 +449,11 @@ createApp({
     if (this.mode == 'dept') {
       this.deptType = this.deptType ? 0 : 1
       this.diagnostic(`- toggle: ${this.deptType}`)
+      this.playClick()
     } else if (this.mode == 'card' && this.employeeName) {
       this.mode = 'dept'
       this.diagnostic('Mode: dept')
+      this.playClick()
     }
     this.displayUpdate()
   },
@@ -456,6 +464,7 @@ createApp({
     } else if (this.mode == 'card' && this.employeeName) {
       this.mode = 'job'
       this.diagnostic('Mode: Job')
+      this.playClick()
     }
     this.displayUpdate()
   },
@@ -464,6 +473,7 @@ createApp({
     if (this.mode == 'job' && this.jobName) {
       this.mode = 'task'
       this.diagnostic('Mode: task')
+      this.playClick()
     }
     this.displayUpdate()
   },
@@ -503,9 +513,11 @@ createApp({
   enableKeyboard() {
     window.addEventListener('keydown', this.keyboardEvent)
   },
+
   disableKeyborad() {
     window.removeEventListener('keydown', this.keyboardEvent)
   },
+
   keyboardEvent(e) {
     switch(e.code) {
       case 'Numpad7':
@@ -564,14 +576,13 @@ createApp({
         break
       case 'NumpadEnter':
         window.that.enterClick()
-        break
       case 'KeyA': // testing add value to local storage
 	break
       case 'KeyD': // delete last value from local storage
+	window.that.deleteFirstPunch()
 	break
       case 'KeyP': // print out value from local storage
-        var punch = JSON.parse(window.localStorage.getItem('punches'))
-	console.log(punch)
+	window.that.printPunches()
 	break
     }
   },
@@ -579,6 +590,21 @@ createApp({
   afterThing() {
     console.log("After Thing")
   },
+
+  deleteFirstPunch() {
+    window.that.playClick()
+    var punches = JSON.parse(window.localStorage.getItem('punches'))
+    console.log(`Deleted Punch: ${punches.shift()}`)
+    window.localStorage.setItem('punches', JSON.stringify(punches))
+  },
+
+  printPunches() {
+    window.that.playClick()
+    const punches = JSON.parse(window.localStorage.getItem('punches'))
+    punches.forEach(punch => console.log(punch))
+    console.log(`Number of Punches: ${punches.length}`)
+  },
+
 
   // Timer Functions ==========================================================
   enableClock() {
