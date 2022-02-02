@@ -260,6 +260,17 @@ createApp({
 
   },
 
+  // Sound Functions ==========================================================
+  playClick() {
+    var audio = new Audio("keyclick.mp3")
+    audio.play()
+  },
+
+  playAccepted() {
+    var audio = new Audio("accepted.mp3")
+    audio.play()
+  },
+
   // Handle Click Functions ===================================================
   digitClick(digit) {
     if (this.mode == 'waiting') {
@@ -599,8 +610,8 @@ createApp({
       window.localStorage.setItem('punches', JSON.stringify([]))
     }
     window.that = this
-    // JSON.parse()
-    // JSON.stringify()
+    this.playClick()
+    this.playAccepted()
   },
   shutDown() {
     this.diagnostic('App Ending ------')
