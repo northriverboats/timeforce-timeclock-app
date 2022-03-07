@@ -485,22 +485,26 @@ createApp({
   // Load Data From Server ====================================================
   async getEmployees(url = `/api/v1/employees`) {
     const resp = await fetch(url).then((res) => res.json())
-    this.employees = resp
+    const employees = Object.assign({}, ...resp.map((x) => ({[x.id]: x})));
+    this.employees = employees
   },
 
   async getDepartments(url = `/api/v1/departments`) {
     const resp = await fetch(url).then((res) => res.json())
-    this.departments = resp
+    const departments = Object.assign({}, ...resp.map((x) => ({[x.id]: x})));
+    this.departments = departments
   },
 
   async getJobs(url = `/api/v1/jobs`) {
     const resp = await fetch(url).then((res) => res.json())
-    this.jobs = resp
+    const jobs = Object.assign({}, ...resp.map((x) => ({[x.id]: x})));
+    this.jobs = jobs
   },
 
   async getTasks(url = `/api/v1/tasks`) {
     const resp = await fetch(url).then((res) => res.json())
-    this.tasks = resp
+    const tasks = Object.assign({}, ...resp.map((x) => ({[x.id]: x})));
+    this.tasks = tasks
   },
 
   async getIpAddress(url = `/api/v1/ip`) {
