@@ -163,6 +163,7 @@ createApp({
 
   sendPunches() {
     // future home of send punches code
+    console.log('send punches here')
   },
 
   // Update Display Functions =================================================
@@ -564,7 +565,6 @@ createApp({
         window.that.inputClick("0")
         break
       case 'Backspace':
-        window.that.deptClick()
         break
       case 'NumpadSubtract':
         window.that.jobClick()
